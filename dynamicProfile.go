@@ -7,15 +7,16 @@ import (
 	"io"
 	"fmt"
 	"log"
+	"os"
 )
 
 
 const url = "https://catfact.ninja/fact"
 
 type User struct {
-	Email  string 
-	Name   string
-	Stack  string
+	Email  string  `json:"email"`
+	Name   string  `json:"name"`
+	Stack  string  `json:"stack"`
 }
 
 type CatFact struct {
@@ -55,7 +56,7 @@ func factHandler(w http.ResponseWriter, req *http.Request) {
 	profile := Profile {
 		Status: "success",
 		User: User {
-			Email: "mwangiruoya@gmail.com",
+			Email: "vmruoya@gmail.com",
 			Name: "Victor Mwangi",
 			Stack: "Go/Gin",
 		},
@@ -74,6 +75,12 @@ func factHandler(w http.ResponseWriter, req *http.Request) {
 func main() {
 	http.HandleFunc("/me", factHandler)
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+
 	fmt.Println("Server running on port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe("0.0.0.0:"+port, nil))
 }
